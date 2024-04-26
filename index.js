@@ -9,7 +9,7 @@ const { Octokit } = require('@octokit/rest');
 const { context: githubContext } = require('@actions/github');
 
 const endpoint = core.getInput('endpoint');
-const azureApiKey = core.getInput('key');
+const azureApiKey = core.getInput('open-api-key');
 const deploymentId = core.getInput('model');
 const openai = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
 
@@ -60,7 +60,7 @@ async function generateExplanation(changes) {
       console.log(prompt);
 
       await client.getChatCompletions({
-        model: deploymentId,
+        model2: deploymentId,
         messages: [{role: "user", content: prompt }],
         temperature: temperature,
         max_tokens: maxResponseTokens,
@@ -73,8 +73,8 @@ async function generateExplanation(changes) {
       let prompt = `This is part ${part} of ${totalParts}. ${customPrompt}\n\n${obj}`;
       console.log(prompt);
 
-      let response = await openai.createChatCompletion({
-        model: model,
+      let response = await client.getChatCompletions({
+        model2: deploymentId,
         messages: [{role: "user", content: prompt }],
         temperature: temperature,
         max_tokens: maxResponseTokens,
