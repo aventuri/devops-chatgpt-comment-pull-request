@@ -4,15 +4,14 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const { encode, decode } = require('gpt-3-encoder')
 
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 const { Octokit } = require('@octokit/rest');
 const { context: githubContext } = require('@actions/github');
 
-// Create an OpenAI instance using the provided API key
-const configuration = new Configuration({
-  apiKey: core.getInput('open-api-key')
-});
-const openai = new OpenAIApi(configuration);
+const endpoint = core.getInput('endpoint');
+const azureApiKey = core.getInput('key');
+const deploymentId = core.getInput('model');
+const openai = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
 
 // Function to generate the explanation of the changes using OpenAI API
 async function generateExplanation(changes) {
@@ -60,8 +59,8 @@ async function generateExplanation(changes) {
       let prompt = `This is part ${part} of ${totalParts}. Just receive and acknowledge as Part ${part}/${totalParts} \n\n${obj}`;
       console.log(prompt);
 
-      await openai.createChatCompletion({
-        model: model,
+      await client.getChatCompletions({
+        model: deploymentId,
         messages: [{role: "user", content: prompt }],
         temperature: temperature,
         max_tokens: maxResponseTokens,

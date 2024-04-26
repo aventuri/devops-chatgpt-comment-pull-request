@@ -38,7 +38,7 @@ This action will retrieve the pull request information and generate an explanati
 | --- | --- | --- | --- |
 | `custom-prompt` | The prompt to feed to ChatGPT | Combining each part. Summarize the changes in 300 words or less based on the pull request title and file changes. | false |
 | `frequency-penalty` | Reduces the probability of words that have already been generated | `0` | false |
-| `github-token` | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: write`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` | true |
+| `github-token` | `MY_GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: write`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | `GITHUB_TOKEN` | true |
 | `ignore-paths` | Comma separated list of paths and files those needs to be ignored from explanation | `All files are scanned if nothing is provided` | false |
 | `max-prompt-tokens` | The max-prompt-tokens variable is used to limit the number of tokens that are sent to OpenAI when generating an explanation of the changes in a pull request. The default value of 10000 is used. | `10000` | false |
 | `max-response-tokens` | The number of tokens allowed in the response | `512` | false |
@@ -161,10 +161,12 @@ jobs:
     name: Add Comment
     steps:
       - name: Add Comment
-        uses: PublicisSapient/devops-chatgpt-comment-pull-request@main
+        uses: aventuri/devops-chatgpt-comment-pull-request@azure
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          open-api-key: ${{ secrets.CHATGPT_API_KEY }}
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          open-api-key: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          model: ${{ secrets.AZURE_OPENAI_MODEL }}
+          endpoint: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
           max-prompt-tokens: '10000'
           ignore-paths: '.github/*, src/, package*.json, .env*'
           model: 'gpt-3.5-turbo'

@@ -15,7 +15,9 @@ jobs:
       - name: Autgenerate Comment
         uses: ./
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          open-api-key: ${{ secrets.CHATGPT_API_KEY }}
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          open-api-key: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          model: ${{ secrets.AZURE_OPENAI_MODEL }}
+          endpoint: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
           max-prompt-tokens: '50000'
           ignore-paths: 'dist, .gitignore, package.json, package-lock.json, README.md, .husky, .github'
