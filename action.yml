@@ -27,6 +27,10 @@ inputs:
     description: 'The model to use for the AI'
     required: false
     default: 'gpt-3.5-turbo'
+  endpoint:
+    description: 'The endpoint to use for the AI'
+    required: false
+    default: 'https://api.openai.com/v1'
   open-api-key:
     description: 'OpenAPI Token'
     required: true
